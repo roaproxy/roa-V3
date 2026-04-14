@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LearnHub</title>
+
+<style>
+  :root {
+    --bg-top: #06110b;
+    --bg-mid: #020302;
+    --bg-bottom: #000000;
+    --accent: #2dff76;
+    --accent-soft: rgba(43, 255, 125, 0.18);
+    --text-main: #eafff2;
+    --text-dim: #8fb49b;
+    --panel-bg: rgba(12, 23, 17, 0.88);
+    --panel-bg-2: rgba(5, 11, 8, 0.92);
+    --radius: 18px;
+    --density-gap: 14px;
+    --density-pad: 16px;
+    --anim-multiplier: 1;
+    --title-scale: 1;
+    --binary-opacity: 0.18;
+  }
+#accessGate {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.gate-box {
+  background: #111;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 280px;
+}
+
+.gate-box h2 {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.gate-box input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.gate-box button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2dff76;
+  cursor: pointer;
+}
+
+.gate-box p {
+  color: red;
+  margin-top: 10px;
+}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    animation: fadeIn calc(0.6s * var(--anim-multiplier)) ease;
+  }
+
+  body.theme-matrix {
+    --bg-top: #06110b;
+    --bg-mid: #020302;
+    --bg-bottom: #000000;
+    --accent: #2dff76;
+    --accent-soft: rgba(43, 255, 125, 0.18);
+  }
+
+  body.theme-alert {
+    --bg-top: #160707;
+    --bg-mid: #090202;
+    --bg-bottom: #000000;
+    --accent: #ff5757;
+    --accent-soft: rgba(255, 87, 87, 0.14);
+  }
+
+  body.theme-ice {
+    --bg-top: #061019;
+    --bg-mid: #03070d;
+    --bg-bottom: #000000;
+    --accent: #6fdcff;
+    --accent-soft: rgba(111, 220, 255, 0.16);
+  }
+
+  body.theme-gold {
+    --bg-top: #171108;
+    --bg-mid: #0b0702;
+    --bg-bottom: #000000;
+    --accent: #ffd76a;
+    --accent-soft: rgba(255, 215, 106, 0.16);
+  }
+
+  body.compact {
+    --density-gap: 10px;
+    --density-pad: 12px;
+    --radius: 14px;
+  }
+
+  body.sharp {
+    --radius: 8px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-90px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes matrixScroll {
+    from { transform: translate3d(var(--parallax-x, 0px), -50%, 0); }
+    to { transform: translate3d(var(--parallax-x, 0px), 0, 0); }
+  }
+
+  @keyframes curtainFall {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+
+  @keyframes glowPulse {
+    0% { transform: translateY(0); filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 45%, transparent)); }
+    50% { transform: translateY(-2px); filter: drop-shadow(0 0 16px color-mix(in srgb, var(--accent) 70%, transparent)); }
+    100% { transform: translateY(0); filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 45%, transparent)); }
+  }
+
+  @keyframes shimmer {
+    from { background-position: -200% center; }
+    to { background-position: 200% center; }
+  }
+
+  @keyframes versionPulse {
+    0% { box-shadow: 0 0 0 rgba(48, 255, 133, 0.2); transform: translateY(0); }
+    50% { box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent); transform: translateY(-2px); }
+    100% { box-shadow: 0 0 0 rgba(48, 255, 133, 0.2); transform: translateY(0); }
+  }
+
+  @keyframes revealUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blinkCursor {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @keyframes glitchFlash {
+    0% { transform: translateX(0); filter: brightness(1); }
+    20% { transform: translateX(-4px); filter: brightness(1.6); }
+    40% { transform: translateX(4px); filter: brightness(0.85); }
+    60% { transform: translateX(-2px); filter: brightness(1.45); }
+    80% { transform: translateX(2px); filter: brightness(0.95); }
+    100% { transform: translateX(0); filter: brightness(1); }
+  }
+
+  @keyframes barGlow {
+    from { box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 20%, transparent); }
+    to { box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 35%, transparent); }
+  }
+
+  header {
+    background: #3b6ea8;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+  }
+
+  .login-area input {
+    padding: 6px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 5px;
+  }
+
+  .login-area button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .login-area button:hover { background: #ddd; }
+
+  .container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .hero-text h1 { color: #2c5d8f; font-size: 28px; }
+  .hero-text p { color: #666; }
+
+  .btn {
+    background: #3b6ea8;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .btn:hover { transform: translateY(-2px); background: #2c5d8f; }
+  .hero img { width: 300px; border-radius: 10px; transition: 0.3s; }
+  .hero img:hover { transform: scale(1.05); }
+  .features, .courses, .testimonials { margin-top: 60px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+  .card h3 { margin-top: 0; color: #2c5d8f; }
+  .course-img { width: 100%; border-radius: 8px; margin-bottom: 10px; transition: 0.3s; }
+  .course-img:hover { transform: scale(1.05); }
+  .hint { text-align: center; margin-top: 40px; font-size: 13px; color: gray; }
+
+  .second-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 10vh 20px 48px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent) 18%, transparent), transparent 38%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bottom) 100%);
+    animation: fadeIn calc(0.7s * var(--anim-multiplier)) ease;
+  }
+
+  .second-page::before {
+    content: "01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010\A01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010 01010101010";
+    position: absolute;
+    inset: -40% -5% auto -5%;
+    height: 220%;
+    color: color-mix(in srgb, var(--accent) calc(var(--binary-opacity) * 100%), transparent);
+    font-family: "Courier New", monospace;
+    font-size: clamp(18px, 1.8vw, 24px);
+    line-height: 1.9;
+    letter-spacing: 0.32em;
+    white-space: pre;
+    text-align: center;
+    animation: matrixScroll calc(10s * var(--anim-multiplier)) linear infinite;
+    pointer-events: none;
+    opacity: 1;
+  }
+
+  body.binary-off .second-page::before { opacity: 0; }
+
+  .second-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.7) 54%, rgba(0, 0, 0, 0.96) 100%);
+    animation: curtainFall calc(1.7s * var(--anim-multiplier)) ease forwards;
+    pointer-events: none;
+  }
+
+  .message-wrap {
+    position: relative;
+    z-index: 1;
+    width: min(1020px, 100%);
+    text-align: center;
+  }
+
+  .headline-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .prank-text {
+    margin: 0;
+    color: var(--accent);
+    font-size: calc(clamp(90px, 18vw, 200px) * var(--title-scale));
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    animation: dropIn calc(0.9s * var(--anim-multiplier)) ease;
+    transition: font-size 0.35s ease, letter-spacing 0.35s ease, color 0.35s ease;
+    text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
+  .prank-text.typing {
+    font-size: calc(clamp(36px, 5vw, 58px) * var(--title-scale));
+    letter-spacing: 0.02em;
+  }
+
+  .prank-text.final {
+    text-transform: none;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 65%, white) 0%, #ffffff 18%, color-mix(in srgb, var(--accent) 85%, white) 35%, #f3fff8 50%, var(--accent) 68%, #ffffff 82%, color-mix(in srgb, var(--accent) 65%, white) 100%);
+    background-size: 220% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: glowPulse calc(2.1s * var(--anim-multiplier)) ease-in-out infinite, shimmer calc(3.2s * var(--anim-multiplier)) linear infinite;
+    text-shadow: none;
+  }
+
+  body.glitch-off .prank-text.glitch { animation: none; }
+  .prank-text.glitch { animation: glitchFlash calc(0.35s * var(--anim-multiplier)) ease 2; }
+
+  .cursor {
+    display: inline-block;
+    margin-left: 6px;
+    color: var(--accent);
+    animation: blinkCursor 1s steps(1) infinite;
+  }
+
+  .version-tag {
+    opacity: 0;
+    transform: translateY(10px);
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    background: rgba(5, 22, 12, 0.6);
+    color: color-mix(in srgb, var(--accent) 45%, white);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 18px color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  .version-tag.show { opacity: 1; transform: translateY(0); animation: revealUp calc(0.5s * var(--anim-multiplier)) ease forwards, versionPulse calc(2s * var(--anim-multiplier)) ease-in-out infinite; }
+
+  .subtitle {
+    margin: 14px auto 0;
+    max-width: 680px;
+    opacity: 0;
+    color: #a8c8b2;
+    font-size: clamp(14px, 2vw, 17px);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    transform: translateY(14px);
+  }
+
+  .subtitle.show { animation: revealUp calc(0.6s * var(--anim-multiplier)) ease forwards; }
+
+  .loader-shell {
+    margin: 18px auto 0;
+    width: min(520px, 100%);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .loader-shell.show { animation: revealUp calc(0.5s * var(--anim-multiplier)) ease forwards; }
+  .loader-meta { display: flex; justify-content: space-between; color: var(--text-dim); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .loader-track {
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .loader-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, white), var(--accent));
+    transition: width 0.12s linear;
+    animation: barGlow calc(1s * var(--anim-multiplier)) ease-in-out infinite alternate;
+  }
+
+  .controls-card,
+  .button-card {
+    margin-top: 24px;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+    background: linear-gradient(180deg, var(--panel-bg), var(--panel-bg-2));
+    color: var(--text-main);
+    border-radius: calc(var(--radius) + 4px);
+    padding: var(--density-pad);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    transform: translateY(18px);
+    text-align: left;
+  }
+
+  .controls-card.show,
+  .button-card.show { animation: revealUp calc(0.7s * var(--anim-multiplier)) ease forwards; }
+
+  .controls-head,
+  .button-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .controls-head h3,
+  .button-head h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--accent) 38%, white);
+  }
+
+  .search-input {
+    width: min(340px, 100%);
+    box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    background: rgba(255,255,255,0.04);
+    color: var(--text-main);
+    border-radius: calc(var(--radius) - 2px);
+    padding: 12px 14px;
+    outline: none;
+  }
+
+  .search-input::placeholder { color: #86a391; }
+
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--density-gap);
+  }
+
+  .control-item {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+
+  .control-item label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .segmented,
+  .theme-grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .toggle-btn,
+  .theme-btn {
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    background: rgba(255,255,255,0.04);
+    color: var(--text-main);
+    border-radius: calc(var(--radius) - 4px);
+    padding: 10px 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .toggle-btn.active,
+  .theme-btn.active {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .slider {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: var(--density-gap);
+    max-height: 430px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .group-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: color-mix(in srgb, var(--accent) 32%, white);
+  }
+
+  .hub-button {
+    border: 1px solid rgba(102, 255, 168, 0.24);
+    background: linear-gradient(180deg, rgba(12, 23, 17, 0.88), rgba(5, 11, 8, 0.92));
+    color: #eafff2;
+    padding: var(--density-pad);
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .hub-button:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34); }
+  .hub-button strong { display: block; font-size: 16px; margin-bottom: 5px; }
+  .hub-button span { display: block; color: #8fb49b; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .recent-list { display: grid; gap: 10px; margin-top: 14px; }
+  .recent-item {
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--text-main);
+    font-size: 14px;
+  }
+
+  .status-footer {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(12px);
+    color: var(--text-dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .status-footer.show { animation: revealUp calc(0.6s * var(--anim-multiplier)) ease forwards; }
+  .status-text { min-height: 22px; margin: 18px 0 0; color: #9fd0ad; font-size: 14px; letter-spacing: 0.01em; opacity: 0; transform: translateY(12px); text-align: center; }
+  .status-text.show { animation: revealUp calc(0.6s * var(--anim-multiplier)) ease forwards; }
+
+  @media (max-width: 640px) {
+    .second-page { padding-top: 14vh; }
+    .headline-row { gap: 10px; }
+    .version-tag { font-size: 14px; padding: 6px 11px; }
+    .control-grid { grid-template-columns: 1fr; }
+    .controls-head, .button-head { align-items: stretch; }
+    .search-input { width: 100%; }
+  }
+</style>
+</head>
+
+<body class="theme-matrix">
+
+<div id="accessGate">
+  <div class="gate-box">
+    <h2>Enter Access Code</h2>
+    <input id="accessCode" type="password" placeholder="Enter code">
+    <button onclick="checkCode()">Enter</button>
+    <p id="codeMsg"></p>
+  </div>
+</div>
+
+<header>
+  <div><strong>LearnHub</strong></div>
+  <div class="login-area" id="loginArea">
+    <input placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+</header>
+<div id="content"></div>
+
+<script>
+const PLACEHOLDER_BUTTONS = [
+
+  // GN Math
+  { name: "GN Math 1", urls: ["https://gn.rykiscool.org/"] },
+  { name: "GN Math 2", urls: ["https://bees.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 3", urls: ["https://mining.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 4", urls: ["https://classic.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 5", urls: ["https://rush.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 6", urls: ["https://racing.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 7", urls: ["https://factory.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 8", urls: ["https://cafe.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 9", urls: ["https://brawl.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 10", urls: ["https://defense.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 11", urls: ["https://coco.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+  { name: "GN Math 12", urls: ["https://laser.blooket.com/gs/Z24tbWF0aC5kZXY=/"] },
+
+  // Velara / Ink
+  { name: "Velara 1", urls: ["https://jfkdng.instructure.site/g"] },
+  { name: "Velara 2", urls: ["https://classroom.asistdoc.ar/"] },
+  { name: "Ink Horizon", urls: ["https://sites.google.com/view/inkhorizon/home"] },
+  { name: "Ink Network", urls: ["https://sites.google.com/view/squidly/home"] },
+
+  // StudyHub
+  { name: "StudyHub 1", urls: ["https://lightspeed.blog/"] },
+  { name: "StudyHub 2", urls: ["https://alternate.2sh.tw/"] },
+  { name: "StudyHub 3", urls: ["https://smartbio.centralinvestmentplaza.ro/"] },
+  { name: "StudyHub 4", urls: ["https://physics.dikpalkc.com.np/"] },
+  { name: "StudyHub 5", urls: ["https://greatful.hsbk.org/"] },
+  { name: "StudyHub 6", urls: ["https://sounds.investordata.co.za/"] },
+
+  // Strawberry
+  { name: "Strawberry 1", urls: ["https://filters.adventurersalmanac.com/"] },
+  { name: "Strawberry 2", urls: ["https://school.agreca.com.ar/"] },
+  { name: "Strawberry 3", urls: ["https://speedlight.asthaibangla.com/"] },
+  { name: "Strawberry 4", urls: ["https://search.botanicaltech.com/"] },
+  { name: "Strawberry 5", urls: ["https://spider.bringmespiderman.pictures/"] },
+  { name: "Strawberry 6", urls: ["https://strawberry.eminescusm.ro/"] },
+  { name: "Strawberry 7", urls: ["https://smartbio.kwgranitecountertops.com/"] },
+  { name: "Strawberry 8", urls: ["https://realistic.planas.cat/"] },
+  { name: "Strawberry 9", urls: ["https://learn.vjason.com/"] },
+  { name: "Strawberry 10", urls: ["https://rivers.vjason.com/"] },
+
+  // Cherri
+  { name: "Cherri 1", urls: ["https://filterbrowser.minibarnsonline.com/"] },
+  { name: "Cherri 2", urls: ["https://filterbrowser.adrian-hofer.at/"] },
+  { name: "Cherri 3", urls: ["https://filterbrowser.2sh.tw/"] },
+
+  // Void
+  { name: "Void 1", urls: ["https://deltafiancing.onesmallinstrument.net"] },
+  { name: "Void 2", urls: ["https://unionfiancing.nubelia.au"] },
+  { name: "Void 3", urls: ["https://infamouseducation.staglin.hr"] },
+  { name: "Void 4", urls: ["https://bunnitutoring.nimux.eu"] },
+  { name: "Void 5", urls: ["https://mythostesting.meteotodi.com"] },
+  { name: "Void 6", urls: ["https://byfronanticheattesting.jmultitechnology.com"] },
+  { name: "Void 7", urls: ["https://instrumentzone.unique-codes.com"] },
+  { name: "Void 8", urls: ["https://recordtimeeating.seanvanderwier.com"] },
+  { name: "Void 9", urls: ["https://solanatrades.clerticket.cl"] },
+  { name: "Void 10", urls: ["https://bendover.doverly.com"] },
+  { name: "Void 11", urls: ["https://web.asthaibangla.com/"] },
+
+  // Utopia
+  { name: "Utopia 1", urls: ["https://earth.google.com.name.vngeek.com/"] },
+  { name: "Utopia 2", urls: ["https://utopia.forkfront.com/"] },
+  { name: "Utopia 3", urls: ["https://beta.salonlucialabra.cl/"] },
+
+  // Galaxy
+  { name: "Galaxy 1", urls: ["https://choppatypesh.fahnle.com.ar/onboarding/"] },
+  { name: "Galaxy 2", urls: ["https://packahouse.imaginechristmaslightshow.com/onboarding/"] },
+  { name: "Galaxy 3", urls: ["https://itsokbro.smiledentalcareva.com/onboarding/"] },
+  { name: "Galaxy 4", urls: ["https://nickelodiano.astraprod.ro/onboarding/"] },
+  { name: "Galaxy 5", urls: ["https://food.gostiljerestoran.rs/onboarding/"] },
+  { name: "Galaxy 6", urls: ["https://green.greenmilesev.com/onboarding/"] },
+
+  // Overcloaked
+  { name: "Overcloaked 1", urls: ["https://overunder3.b-cdn.net/"] },
+  { name: "Overcloaked 2", urls: ["https://overunder4.b-cdn.net/"] },
+  { name: "Overcloaked 3", urls: ["https://overunder5.b-cdn.net/"] },
+  { name: "Overcloaked 4", urls: ["https://overunder6.b-cdn.net/"] },
+  { name: "Overcloaked 5", urls: ["https://overunder7.b-cdn.net/"] },
+  { name: "Overcloaked 6", urls: ["https://overunder8.b-cdn.net/"] },
+  { name: "Overcloaked 7", urls: ["https://overunder9.b-cdn.net/"] },
+  { name: "Overcloaked 8", urls: ["https://overunder10.b-cdn.net/"] },
+  { name: "Overcloaked 9", urls: ["https://overunder11.b-cdn.net/"] },
+  { name: "Overcloaked 10", urls: ["https://overunder12.b-cdn.net/"] },
+  { name: "Overcloaked 11", urls: ["https://overunder13.b-cdn.net/"] },
+  { name: "Overcloaked 12", urls: ["https://overunder14.b-cdn.net/"] },
+  { name: "Overcloaked 13", urls: ["https://overunder15.b-cdn.net/"] },
+  { name: "Overcloaked 14", urls: ["https://overunder16.b-cdn.net/"] },
+  { name: "Overcloaked 15", urls: ["https://overunder17.b-cdn.net/"] },
+  { name: "Overcloaked 16", urls: ["https://overunder18.b-cdn.net/"] },
+  { name: "Overcloaked 17", urls: ["https://overunder19.b-cdn.net/"] },
+  { name: "Overcloaked 18", urls: ["https://overunder20.b-cdn.net/"] },
+  { name: "Overcloaked 19", urls: ["https://overunder21.b-cdn.net/"] },
+  { name: "Overcloaked 20", urls: ["https://overunder22.b-cdn.net/"] },
+  { name: "Overcloaked 21", urls: ["https://overunder23.b-cdn.net/"] },
+  { name: "Overcloaked 22", urls: ["https://overunder24.b-cdn.net/"] },
+  { name: "Overcloaked 23", urls: ["https://overunder25.b-cdn.net/"] },
+  { name: "Overcloaked 24", urls: ["https://overunder26.b-cdn.net/"] },
+  { name: "Overcloaked 25", urls: ["https://overunder27.b-cdn.net/"] },
+  { name: "Overcloaked 26", urls: ["https://overunder28.b-cdn.net/"] },
+  { name: "Overcloaked 27", urls: ["https://overunder29.b-cdn.net/"] },
+  { name: "Overcloaked 28", urls: ["https://overunder30.b-cdn.net/"] },
+  { name: "Overcloaked 29", urls: ["https://overunder31.b-cdn.net/"] },
+  { name: "Overcloaked 30", urls: ["https://overunder32.b-cdn.net/"] },
+  { name: "Overcloaked 31", urls: ["https://overunder33.b-cdn.net/"] },
+  { name: "Overcloaked 32", urls: ["https://overunder34.b-cdn.net/"] },
+  { name: "Overcloaked 33", urls: ["https://overunder35.b-cdn.net/"] },
+  { name: "Overcloaked 34", urls: ["https://overunder36.b-cdn.net/"] },
+  { name: "Overcloaked 35", urls: ["https://overunder37.b-cdn.net/"] },
+  { name: "Overcloaked 36", urls: ["https://overunder38.b-cdn.net/"] },
+  { name: "Overcloaked 37", urls: ["https://overunder39.b-cdn.net/"] },
+  { name: "Overcloaked 38", urls: ["https://overunder40.b-cdn.net/"] },
+  { name: "Overcloaked 39", urls: ["https://overunder41.b-cdn.net/"] },
+  { name: "Overcloaked 40", urls: ["https://overunder42.b-cdn.net/"] },
+  { name: "Overcloaked 41", urls: ["https://overunder43.b-cdn.net/"] },
+  { name: "Overcloaked 42", urls: ["https://overunder44.b-cdn.net/"] },
+  { name: "Overcloaked 43", urls: ["https://overunder45.b-cdn.net/"] },
+  { name: "Overcloaked 44", urls: ["https://overunder46.b-cdn.net/"] },
+  { name: "Overcloaked 45", urls: ["https://overunder47.b-cdn.net/"] },
+  { name: "Overcloaked 46", urls: ["https://overunder48.b-cdn.net/"] },
+  { name: "Overcloaked 47", urls: ["https://overunder49.b-cdn.net/"] },
+  { name: "Overcloaked 48", urls: ["https://overunder50.b-cdn.net/"] },
+  { name: "Overcloaked 49", urls: ["https://overunder51.b-cdn.net/"] },
+  { name: "Overcloaked 50", urls: ["https://overunder52.b-cdn.net/"] },
+  { name: "Overcloaked 51", urls: ["https://overunder53.b-cdn.net/"] },
+  { name: "Overcloaked 52", urls: ["https://overunder54.b-cdn.net/"] },
+  { name: "Overcloaked 53", urls: ["https://overunder55.b-cdn.net/"] },
+  { name: "Overcloaked 54", urls: ["https://overunder56.b-cdn.net/"] },
+  { name: "Overcloaked 55", urls: ["https://overunder57.b-cdn.net/"] },
+  { name: "Overcloaked 56", urls: ["https://overunder58.b-cdn.net/"] },
+  { name: "Overcloaked 57", urls: ["https://overunder59.b-cdn.net/"] },
+  { name: "Overcloaked 58", urls: ["https://overunder60.b-cdn.net/"] },
+  { name: "Overcloaked 59", urls: ["https://overunder61.b-cdn.net/"] },
+  { name: "Overcloaked 60", urls: ["https://overunder62.b-cdn.net/"] },
+  { name: "Overcloaked 61", urls: ["https://overunder63.b-cdn.net/"] },
+  { name: "Overcloaked 62", urls: ["https://overunder64.b-cdn.net/"] },
+  { name: "Overcloaked 63", urls: ["https://overunder65.b-cdn.net/"] },
+  { name: "Overcloaked 64", urls: ["https://overunder66.b-cdn.net/"] },
+  { name: "Overcloaked 65", urls: ["https://overunder67.b-cdn.net/"] },
+  { name: "Overcloaked 66", urls: ["https://overunder68.b-cdn.net/"] },
+  { name: "Overcloaked 67", urls: ["https://overunder69.b-cdn.net/"] },
+  { name: "Overcloaked 68", urls: ["https://overunder70.b-cdn.net/"] },
+  { name: "Overcloaked 69", urls: ["https://overunder71.b-cdn.net/"] },
+  { name: "Overcloaked 70", urls: ["https://overunder72.b-cdn.net/"] },
+  { name: "Overcloaked 71", urls: ["https://overunder73.b-cdn.net/"] },
+  { name: "Overcloaked 72", urls: ["https://overunder74.b-cdn.net/"] },
+  { name: "Overcloaked 73", urls: ["https://overunder75.b-cdn.net/"] },
+  { name: "Overcloaked 74", urls: ["https://overunder76.b-cdn.net/"] },
+  { name: "Overcloaked 75", urls: ["https://overunder77.b-cdn.net/"] },
+  { name: "Overcloaked 76", urls: ["https://overunder78.b-cdn.net/"] },
+  { name: "Overcloaked 77", urls: ["https://overunder79.b-cdn.net/"] },
+  { name: "Overcloaked 78", urls: ["https://overunder80.b-cdn.net/"] },
+  { name: "Overcloaked 79", urls: ["https://overunder81.b-cdn.net/"] },
+  { name: "Overcloaked 80", urls: ["https://overunder82.b-cdn.net/"] },
+  { name: "Overcloaked 81", urls: ["https://overunder83.b-cdn.net/"] },
+  { name: "Overcloaked 82", urls: ["https://overunder84.b-cdn.net/"] },
+  { name: "Overcloaked 83", urls: ["https://overunder85.b-cdn.net/"] },
+  { name: "Overcloaked 84", urls: ["https://overunder86.b-cdn.net/"] },
+  { name: "Overcloaked 85", urls: ["https://overunder87.b-cdn.net/"] },
+  { name: "Overcloaked 86", urls: ["https://overunder88.b-cdn.net/"] },
+  { name: "Overcloaked 87", urls: ["https://overunder89.b-cdn.net/"] },
+  { name: "Overcloaked 88", urls: ["https://overunder90.b-cdn.net/"] },
+  { name: "Overcloaked 89", urls: ["https://overunder91.b-cdn.net/"] },
+  { name: "Overcloaked 90", urls: ["https://overunder92.b-cdn.net/"] },
+  { name: "Overcloaked 91", urls: ["https://overunder93.b-cdn.net/"] },
+  { name: "Overcloaked 92", urls: ["https://overunder94.b-cdn.net/"] },
+  { name: "Overcloaked 93", urls: ["https://overunder95.b-cdn.net/"] },
+  { name: "Overcloaked 94", urls: ["https://overunder96.b-cdn.net/"] },
+  { name: "Overcloaked 95", urls: ["https://overunder97.b-cdn.net/"] },
+  { name: "Overcloaked 96", urls: ["https://overunder98.b-cdn.net/"] },
+  { name: "Overcloaked 97", urls: ["https://overunder99.b-cdn.net/"] },
+  { name: "Overcloaked 98", urls: ["https://overunder100.b-cdn.net/"] },
+
+  // Axiom
+  { name: "Axiom 1", urls: ["https://files.copytek.cl/"] },
+  { name: "Axiom 2", urls: ["https://app.codewave.com.np/"] },
+  { name: "Axiom 3", urls: ["https://shop.soynutrimeraki.cl/"] },
+  { name: "Axiom 4", urls: ["https://learn.morso-si.dk/"] },
+  { name: "Axiom 5", urls: ["https://act.savequeechylake.org/"] },
+  { name: "Axiom 6", urls: ["https://learn.gls-drone-pilot.com/"] },
+  { name: "Axiom 7", urls: ["https://download.s-engine.com/"] },
+  { name: "Axiom 8", urls: ["https://typing.qwerty.com.ar/"] },
+  { name: "Axiom 9", urls: ["https://documentation.7btech.com/"] },
+  { name: "Axiom 10", urls: ["https://learn.botsev.eu/"] },
+  { name: "Axiom 11", urls: ["https://hosting.biec.com.np/"] },
+
+  // Shadow
+  { name: "Shadow 1", urls: ["https://strawberryiscool.b-cdn.net/"] },
+  { name: "Shadow 2", urls: ["https://virtualgrammar.wirtschaftslexikon.org/"] },
+  { name: "Shadow 3", urls: ["https://hyperlogic.wirtschaftslexikon.org/"] },
+  { name: "Shadow 4", urls: ["https://fastgeo.eclipsecastellon.net/"] },
+  { name: "Shadow 5", urls: ["https://rapidbio.eclipsecastellon.net/"] },
+  { name: "Shadow 6", urls: ["https://megapoems.salonlucialabra.cl/"] },
+  { name: "Shadow 7", urls: ["https://chillpoems.salonlucialabra.cl/"] }
+];
+
+const THEME_LABELS = {
+  'theme-matrix': 'Matrix',
+  'theme-alert': 'Alert',
+  'theme-ice': 'Ice',
+  'theme-gold': 'Gold'
+};
+
+let refreshed = sessionStorage.getItem('refreshed');
+let loggedIn = sessionStorage.getItem('loggedIn');
+const content = document.getElementById('content');
+const loginArea = document.getElementById('loginArea');
+const header = document.querySelector('header');
+
+if (loggedIn) {
+  loginArea.innerHTML = '<span>Welcome back</span>';
+}
+
+if (!refreshed) {
+  content.innerHTML = `
+<div class="container">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Upgrade Your Learning Experience</h1>
+      <p>Access modern courses designed to help you grow skills for school, work, and beyond.</p>
+      <button class="btn">Browse Courses</button>
+    </div>
+    <img src="https://picsum.photos/400/250" />
+  </div>
+  <div class="features">
+    <div class="grid">
+      <div class="card"><h3>Expert Lessons</h3><p>Learn from high-quality content designed for real understanding.</p></div>
+      <div class="card"><h3>Interactive Learning</h3><p>Practice with engaging activities and examples.</p></div>
+      <div class="card"><h3>Global Access</h3><p>Study anytime, anywhere at your own pace.</p></div>
+    </div>
+  </div>
+  <div class="courses">
+    <h2>Popular Courses</h2>
+    <div class="grid">
+      <div class="card"><img class="course-img" src="https://picsum.photos/300/150?1"><h3>Web Development</h3><p>Learn HTML, CSS, and JavaScript basics.</p></div>
+      <div class="card"><img class="course-img" src="https://picsum.photos/300/150?2"><h3>Business Skills</h3><p>Understand management and leadership concepts.</p></div>
+      <div class="card"><img class="course-img" src="https://picsum.photos/300/150?3"><h3>Science Basics</h3><p>Explore core ideas in environmental science.</p></div>
+    </div>
+  </div>
+  <div class="testimonials">
+    <h2>Student Feedback</h2>
+    <div class="grid">
+      <div class="card"><p>"This made learning way easier to understand."</p></div>
+      <div class="card"><p>"I actually enjoy studying now."</p></div>
+      <div class="card"><p>"Super helpful and simple explanations."</p></div>
+    </div>
+  </div>
+  <div class="hint">click refresh</div>
+</div>`;
+  sessionStorage.setItem('refreshed', 'true');
+} else {
+  header.style.display = 'none';
+  content.innerHTML = `
+<div class="second-page" id="secondPage">
+  <div class="message-wrap">
+    <div class="headline-row">
+      <h1 class="prank-text" id="prankText">error<span class="cursor">|</span></h1>
+      <div class="version-tag" id="versionTag">v3</div>
+    </div>
+    <p class="subtitle" id="subtitle">over 200+ sites. This project took over 2 Weeks. PLEASE stop complaining.</p>
+    <div class="loader-shell" id="loaderShell">
+      <div class="loader-meta"><span>Loading sequence</span><span id="loaderPercent">0%</span></div>
+      <div class="loader-track"><div class="loader-bar" id="loaderBar"></div></div>
+    </div>
+    <div class="controls-card" id="controlsCard">
+      <div class="controls-head">
+        <h3>Customize</h3>
+      </div>
+      <div class="control-grid">
+        <div class="control-item">
+          <label>Theme</label>
+          <div class="theme-grid">
+            <button class="theme-btn active" data-theme="theme-matrix" type="button">Matrix</button>
+            <button class="theme-btn" data-theme="theme-alert" type="button">Alert</button>
+            <button class="theme-btn" data-theme="theme-ice" type="button">Ice</button>
+            <button class="theme-btn" data-theme="theme-gold" type="button">Gold</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <label>Density</label>
+          <div class="segmented">
+            <button class="toggle-btn active" data-density="comfortable" type="button">Comfort</button>
+            <button class="toggle-btn" data-density="compact" type="button">Compact</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <label>Shape</label>
+          <div class="segmented">
+            <button class="toggle-btn active" data-shape="rounded" type="button">Rounded</button>
+            <button class="toggle-btn" data-shape="sharp" type="button">Sharp</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <label>Effects</label>
+          <div class="segmented">
+            <button class="toggle-btn active" data-effect="binary" type="button">Binary</button>
+            <button class="toggle-btn active" data-effect="glitch" type="button">Glitch</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <label>Animation Speed</label>
+          <input class="slider" id="speedSlider" type="range" min="0.7" max="1.6" step="0.1" value="1">
+        </div>
+        <div class="control-item">
+          <label>Text Size</label>
+          <input class="slider" id="textSlider" type="range" min="0.8" max="1.3" step="0.05" value="1">
+        </div>
+      </div>
+    </div>
+    <div class="button-card" id="buttonCard">
+      <div class="button-head">
+        <h3>Links</h3>
+        <input class="search-input" id="searchInput" type="text" placeholder="Search buttons or groups...">
+      </div>
+      <div class="button-grid" id="buttonGrid"></div>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+    <div class="status-footer" id="statusFooter">
+      <span>session verified</span>
+      <span>hub synced</span>
+      <span id="themeStatus">status: matrix</span>
+    </div>
+    <p class="status-text" id="statusText" aria-live="polite"></p>
+  </div>
+</div>`;
+  renderButtons(PLACEHOLDER_BUTTONS);
+  renderRecent();
+  bindButtons();
+  bindUI();
+  bindThemes();
+  bindParallax();
+  runSecondPageAnimation();
+}
+
+function login() {
+  sessionStorage.setItem('loggedIn', 'true');
+  location.reload();
+}
+
+function renderButtons(items) {
+  const buttonGrid = document.getElementById('buttonGrid');
+  if (!buttonGrid) return;
+  buttonGrid.innerHTML = items.map((item) => `
+    <button class="hub-button" type="button" data-name="${escapeHtml(item.name)}">
+      <span class="group-label">${escapeHtml(item.group || 'Hub')}</span>
+      <strong>${escapeHtml(item.name)}</strong>
+      <span>${item.urls.length ? `${item.urls.length} link${item.urls.length === 1 ? '' : 's'} ready` : 'Paste approved URL later'}</span>
+    </button>
+  `).join('');
+}
+
+function bindButtons() {
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('.hub-button');
+    if (!button) return;
+    const name = button.dataset.name || 'Hub';
+    const hub = PLACEHOLDER_BUTTONS.find((item) => item.name === name);
+    const url = getFirstSafeUrl(hub?.urls || []);
+    saveRecent(name);
+    renderRecent();
+    if (!url) {
+      updateStatus(`${name} does not have any approved links configured yet.`);
+      return;
+    }
+    const tab = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!tab) {
+      updateStatus(`Pop-up blocked while opening ${name}. Allow pop-ups and try again.`);
+      return;
+    }
+    updateStatus(`Opening ${name}...`);
+  });
+}
+
+function bindUI() {
+  const searchInput = document.getElementById('searchInput');
+  const speedSlider = document.getElementById('speedSlider');
+  const textSlider = document.getElementById('textSlider');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = PLACEHOLDER_BUTTONS.filter((item) => `${item.name} ${item.group}`.toLowerCase().includes(query));
+      renderButtons(filtered);
+    });
+  }
+
+  speedSlider?.addEventListener('input', () => {
+    document.documentElement.style.setProperty('--anim-multiplier', speedSlider.value);
+  });
+
+  textSlider?.addEventListener('input', () => {
+    document.documentElement.style.setProperty('--title-scale', textSlider.value);
+  });
+
+  document.querySelectorAll('[data-density]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.body.classList.toggle('compact', button.dataset.density === 'compact');
+      setActive('[data-density]', button);
+    });
+  });
+
+  document.querySelectorAll('[data-shape]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.body.classList.toggle('sharp', button.dataset.shape === 'sharp');
+      setActive('[data-shape]', button);
+    });
+  });
+
+  document.querySelectorAll('[data-effect]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (button.dataset.effect === 'binary') {
+        document.body.classList.toggle('binary-off');
+      }
+      if (button.dataset.effect === 'glitch') {
+        document.body.classList.toggle('glitch-off');
+      }
+      button.classList.toggle('active');
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === '/') {
+      event.preventDefault();
+      searchInput?.focus();
+    }
+    if (event.key === 'Escape') {
+      searchInput?.blur();
+      updateStatus('Controls idle.');
+    }
+  });
+}
+
+function bindThemes() {
+  document.querySelectorAll('[data-theme]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.body.classList.remove('theme-matrix', 'theme-alert', 'theme-ice', 'theme-gold');
+      document.body.classList.add(button.dataset.theme);
+      const label = THEME_LABELS[button.dataset.theme] || 'Matrix';
+      const themeStatus = document.getElementById('themeStatus');
+      if (themeStatus) themeStatus.textContent = `status: ${label.toLowerCase()}`;
+      setActive('[data-theme]', button);
+    });
+  });
+}
+
+function bindParallax() {
+  const secondPage = document.getElementById('secondPage');
+  if (!secondPage) return;
+  secondPage.addEventListener('mousemove', (event) => {
+    const offsetX = ((event.clientX / window.innerWidth) - 0.5) * 24;
+    secondPage.style.setProperty('--parallax-x', `${offsetX}px`);
+  });
+}
+
+async function runSecondPageAnimation() {
+  const prankText = document.getElementById('prankText');
+  const versionTag = document.getElementById('versionTag');
+  const subtitle = document.getElementById('subtitle');
+  const controlsCard = document.getElementById('controlsCard');
+  const buttonCard = document.getElementById('buttonCard');
+  const statusFooter = document.getElementById('statusFooter');
+  const loaderShell = document.getElementById('loaderShell');
+
+  if (!prankText) return;
+
+  await delay(2000);
+  prankText.classList.add('typing');
+  prankText.classList.add('glitch');
+  await swapText(prankText, 'Sike! welcome to edu', true);
+  prankText.classList.remove('glitch');
+  await delay(700);
+  loaderShell?.classList.add('show');
+  await runLoader();
+  await swapText(prankText, 'Loaded!', true);
+  controlsCard?.classList.add('show');
+  buttonCard?.classList.add('show');
+  statusFooter?.classList.add('show');
+  await delay(1200);
+  await swapText(prankText, 'roa hub', true);
+  versionTag?.classList.add('show');
+  subtitle?.classList.add('show');
+  updateStatus('Hub visuals online. Press / to search.');
+}
+
+async function runLoader() {
+  const bar = document.getElementById('loaderBar');
+  const percent = document.getElementById('loaderPercent');
+  for (let i = 0; i <= 100; i += 4) {
+    if (bar) bar.style.width = `${i}%`;
+    if (percent) percent.textContent = `${i}%`;
+    await delay(45);
+  }
+}
+
+function swapText(element, nextText, shiny) {
+  const textNode = element.childNodes[0];
+  const deleteSpeed = 80;
+  const typeSpeed = 75;
+
+  return new Promise((resolve) => {
+    function setText(value) {
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        textNode.textContent = value;
+      } else {
+        element.firstChild.textContent = value;
+      }
+    }
+
+    function getText() {
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) return textNode.textContent;
+      return element.textContent.replace('|', '');
+    }
+
+    function erase() {
+      const current = getText();
+      if (!current.length) {
+        if (shiny) element.classList.add('final');
+        else element.classList.remove('final');
+        write(0);
+        return;
+      }
+      setText(current.slice(0, -1));
+      setTimeout(erase, deleteSpeed);
+    }
+
+    function write(index) {
+      if (index > nextText.length) {
+        resolve();
+        return;
+      }
+      setText(nextText.slice(0, index));
+      setTimeout(() => write(index + 1), typeSpeed);
+    }
+
+    erase();
+  });
+}
+
+function renderRecent() {
+  const recentList = document.getElementById('recentList');
+  if (!recentList) return;
+  const recent = JSON.parse(localStorage.getItem('roa-hub-recent') || '[]');
+  recentList.innerHTML = recent.length
+    ? recent.map((item) => `<div class="recent-item">Recent: ${escapeHtml(item)}</div>`).join('')
+    : '<div class="recent-item">No recent launches yet.</div>';
+}
+
+function saveRecent(name) {
+  const recent = JSON.parse(localStorage.getItem('roa-hub-recent') || '[]');
+  const next = [name, ...recent.filter((item) => item !== name)].slice(0, 5);
+  localStorage.setItem('roa-hub-recent', JSON.stringify(next));
+}
+
+function setActive(selector, activeButton) {
+  document.querySelectorAll(selector).forEach((button) => button.classList.remove('active'));
+  activeButton.classList.add('active');
+}
+
+function getFirstSafeUrl(urls) {
+  return urls.find((url) => /^https?:\/\//i.test(url)) || '';
+}
+
+function updateStatus(message) {
+  const statusText = document.getElementById('statusText');
+  if (!statusText) return;
+  statusText.textContent = message;
+  statusText.classList.add('show');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const CORRECT_CODE = "8211"; // change this
+
+function checkCode() {
+  const input = document.getElementById("accessCode").value;
+  const msg = document.getElementById("codeMsg");
+
+  if (input === CORRECT_CODE) {
+    sessionStorage.setItem("accessGranted", "true");
+    document.getElementById("accessGate").style.display = "none";
+  } else {
+    msg.textContent = "Wrong code.";
+  }
+}
+
+window.addEventListener("load", () => {
+  if (sessionStorage.getItem("accessGranted") === "true") {
+    const gate = document.getElementById("accessGate");
+    if (gate) gate.style.display = "none";
+  }
+});
+
+</script>
+</body>
+</html>
